@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, make_response
+from os import getrandom
 import db
 
 app = Flask(__name__)
@@ -14,9 +15,14 @@ def index():
 
     comments = db.get_comments(search_query)
 
-    return render_template('index.html',
+    response = make_response(render_template('index.html',
                            comments=comments,
-                           search_query=search_query)
+                           search_query=search_query))
+
+    response.set_cookie('username', 'Fabian')
+    response.set_cookie('password', getrandom(16).hex())
+
+    return response
 
 @app.route('/reset', methods=['POST'])
 def reset():
