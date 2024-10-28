@@ -25,3 +25,8 @@ def get_comments(search_query=None):
         if search_query is None or search_query in comment:
             results.append(comment)
     return results
+
+def reset():
+    db = connect_db()
+    db.cursor().execute('DROP TABLE comments')
+    db.commit()
